@@ -87,8 +87,7 @@ serve(async (req) => {
               }
             ]
           }
-        ],
-        max_completion_tokens: 4000
+        ]
       }),
     });
 
