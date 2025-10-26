@@ -79,6 +79,7 @@ interface TextBoxInputProps {
 
 const TextBoxInput = ({ box, onChange, calculateWidth, sheetWidth }: TextBoxInputProps) => {
   const [width, setWidth] = useState(box.width);
+  const [isAtMaxWidth, setIsAtMaxWidth] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -91,11 +92,33 @@ const TextBoxInput = ({ box, onChange, calculateWidth, sheetWidth }: TextBoxInpu
   useEffect(() => {
     const newWidth = calculateWidth(box.text);
     const maxWidth = sheetWidth - box.x - 20; // 20px padding from right edge
-    setWidth(Math.min(newWidth, maxWidth));
+    const constrainedWidth = Math.min(newWidth, maxWidth);
+    setWidth(constrainedWidth);
+    setIsAtMaxWidth(newWidth >= maxWidth);
   }, [box.text, box.x, sheetWidth, calculateWidth]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value);
+    const newText = e.target.value;
+    const newWidth = calculateWidth(newText);
+    const maxWidth = sheetWidth - box.x - 20;
+    
+    // Only allow change if new text fits within max width
+    if (newWidth <= maxWidth) {
+      onChange(newText);
+    }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Allow backspace, delete, arrow keys, etc. even at max width
+    const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Home', 'End', 'Tab'];
+    if (allowedKeys.includes(e.key)) {
+      return;
+    }
+    
+    // Prevent new characters if at max width
+    if (isAtMaxWidth && e.key.length === 1) {
+      e.preventDefault();
+    }
   };
 
   return (
@@ -104,7 +127,8 @@ const TextBoxInput = ({ box, onChange, calculateWidth, sheetWidth }: TextBoxInpu
       type="text"
       value={box.text}
       onChange={handleChange}
-      className="absolute border-b border-primary/20 bg-transparent text-foreground focus:outline-none focus:border-primary transition-colors px-1"
+      onKeyDown={handleKeyDown}
+      className="absolute border-b border-primary/20 bg-transparent text-foreground focus:outline-none focus:border-primary transition-colors px-1 overflow-hidden"
       style={{
         left: `${box.x}px`,
         top: `${box.y}px`,
