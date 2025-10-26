@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, Brain, Target, Zap, DollarSign } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { BookOpen, Brain, Target, Zap, DollarSign, Sparkles } from "lucide-react";
 
 interface LandingPageProps {
   onEnterApp: () => void;
@@ -26,6 +27,12 @@ const benefits = [
     icon: BookOpen,
     title: "Step-by-Step Learning",
     description: "Understand every step of the problem-solving process"
+  },
+  {
+    icon: Sparkles,
+    title: "Unlimited Practice Questions",
+    description: "Get personalized practice questions based on your strengths and weaknesses",
+    comingSoon: true
   }
 ];
 
@@ -50,9 +57,14 @@ export const LandingPage = ({ onEnterApp }: LandingPageProps) => {
               {benefits.map((benefit, index) => (
                 <Card 
                   key={index} 
-                  className="hover-scale border-primary/20 hover:border-primary/40 transition-all duration-300 bg-card/80 backdrop-blur-sm"
+                  className="hover-scale border-primary/20 hover:border-primary/40 transition-all duration-300 bg-card/80 backdrop-blur-sm relative"
                 >
                   <CardContent className="pt-6 space-y-3">
+                    {benefit.comingSoon && (
+                      <Badge className="absolute top-2 right-2 bg-accent text-accent-foreground">
+                        Coming Soon
+                      </Badge>
+                    )}
                     <div className="flex justify-center">
                       <div className="p-3 rounded-full bg-primary/10 transition-all duration-300 group-hover:bg-primary/20">
                         <benefit.icon className="w-6 h-6 text-primary transition-transform duration-300 hover:scale-110" />
