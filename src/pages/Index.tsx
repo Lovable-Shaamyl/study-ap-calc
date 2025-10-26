@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { LandingPage } from "@/components/LandingPage";
 import { LoginPage } from "@/components/LoginPage";
 import { ExamSelectionPage } from "@/components/ExamSelectionPage";
 import { MainApp } from "@/components/MainApp";
@@ -7,14 +8,20 @@ import { Loader2 } from "lucide-react";
 
 const Index = () => {
   const { currentUser, loading } = useAuth();
+  const [hasEnteredApp, setHasEnteredApp] = useState(false);
   const [selectedExam, setSelectedExam] = useState<string | null>(null);
 
   // Reset selected exam when user authentication state changes
   useEffect(() => {
     if (!currentUser) {
       setSelectedExam(null);
+      setHasEnteredApp(false);
     }
   }, [currentUser]);
+
+  const handleEnterApp = () => {
+    setHasEnteredApp(true);
+  };
 
   const handleExamSelect = (examId: string) => {
     setSelectedExam(examId);
@@ -23,6 +30,11 @@ const Index = () => {
   const handleBackToExams = () => {
     setSelectedExam(null);
   };
+
+  // Show landing page first
+  if (!hasEnteredApp) {
+    return <LandingPage onEnterApp={handleEnterApp} />;
+  }
 
   // Show loading spinner while checking authentication
   if (loading) {
