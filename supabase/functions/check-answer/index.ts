@@ -61,7 +61,7 @@ serve(async (req) => {
       promptText += `\n\nStudent's answer in text: ${answerText.trim()}`;
     }
 
-    console.log('Calling OpenAI API...');
+    console.log('Calling OpenAI API with model: gpt-5-2025-08-07');
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -70,7 +70,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-5',
+        model: 'gpt-5-2025-08-07',
         messages: [
           {
             role: 'user',
@@ -99,13 +99,17 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    const responseContent = data.choices[0]?.message?.content;
+    console.log('OpenAI response received, checking content...');
+    console.log('Response data:', JSON.stringify(data, null, 2));
+    
+    const responseContent = data.choices?.[0]?.message?.content;
 
     if (!responseContent) {
+      console.error('No content in response. Full data:', JSON.stringify(data));
       throw new Error('No response content received from OpenAI');
     }
 
-    console.log('Successfully received AI response');
+    console.log('Successfully received AI response with content');
 
     try {
       // Parse the JSON response
