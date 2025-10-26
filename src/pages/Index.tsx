@@ -31,8 +31,8 @@ const Index = () => {
     setSelectedExam(null);
   };
 
-  // Show landing page first
-  if (!hasEnteredApp) {
+  // Show landing page first (only if user is not logged in)
+  if (!hasEnteredApp && !currentUser) {
     return <LandingPage onEnterApp={handleEnterApp} />;
   }
 
