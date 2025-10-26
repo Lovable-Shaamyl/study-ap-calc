@@ -68,7 +68,7 @@ export const LandingPage = ({ onEnterApp }: LandingPageProps) => {
             size="lg"
             className="text-lg px-8 py-6 hover-scale"
           >
-            Begin
+            Start Learning
           </Button>
         </div>
       </div>
