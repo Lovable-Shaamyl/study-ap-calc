@@ -133,9 +133,12 @@ const TextBoxInput = ({ box, onChange, onDelete, calculateWidth, sheetWidth }: T
     <div
       className="absolute group"
       style={{
-        left: `${box.x}px`,
-        top: `${box.y}px`,
-        width: `${width}px`,
+        left: `${box.x - 5}px`,
+        top: `${box.y - 8}px`,
+        width: `${width + 10}px`,
+        paddingTop: "8px",
+        paddingLeft: "5px",
+        paddingRight: "5px",
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -158,7 +161,7 @@ const TextBoxInput = ({ box, onChange, onDelete, calculateWidth, sheetWidth }: T
       {isHovered && (
         <button
           onClick={onDelete}
-          className="absolute -top-3 -right-3 w-4 h-4 rounded-full bg-destructive hover:bg-destructive/80 text-destructive-foreground flex items-center justify-center transition-all shadow-sm hover:shadow-md z-10"
+          className="absolute top-0 right-0 w-4 h-4 rounded-full bg-destructive hover:bg-destructive/80 text-destructive-foreground flex items-center justify-center transition-all shadow-sm hover:shadow-md z-10"
           aria-label="Delete text box"
         >
           <X size={10} strokeWidth={3} />
