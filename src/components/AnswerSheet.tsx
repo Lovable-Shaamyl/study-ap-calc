@@ -158,10 +158,10 @@ const TextBoxInput = ({ box, onChange, onDelete, calculateWidth, sheetWidth }: T
       {isHovered && (
         <button
           onClick={onDelete}
-          className="absolute -top-5 -right-5 w-5 h-5 rounded-full bg-destructive hover:bg-destructive/80 text-destructive-foreground flex items-center justify-center transition-all shadow-sm hover:shadow-md"
+          className="absolute -top-3 -right-3 w-4 h-4 rounded-full bg-destructive hover:bg-destructive/80 text-destructive-foreground flex items-center justify-center transition-all shadow-sm hover:shadow-md z-10"
           aria-label="Delete text box"
         >
-          <X size={12} strokeWidth={3} />
+          <X size={10} strokeWidth={3} />
         </button>
       )}
     </div>
