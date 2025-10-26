@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { X } from "lucide-react";
 
 interface TextBox {
   id: string;
@@ -39,6 +40,10 @@ export const AnswerSheet = () => {
     );
   };
 
+  const handleDeleteBox = (id: string) => {
+    setTextBoxes(textBoxes.filter((box) => box.id !== id));
+  };
+
   const calculateWidth = (text: string) => {
     // Rough estimation: 8px per character, with min 200px and bounded by sheet width
     const estimatedWidth = Math.max(200, text.length * 8 + 40);
@@ -62,6 +67,7 @@ export const AnswerSheet = () => {
           key={box.id}
           box={box}
           onChange={(text) => handleTextChange(box.id, text)}
+          onDelete={() => handleDeleteBox(box.id)}
           calculateWidth={calculateWidth}
           sheetWidth={sheetRef.current?.offsetWidth || 0}
         />
@@ -73,13 +79,15 @@ export const AnswerSheet = () => {
 interface TextBoxInputProps {
   box: TextBox;
   onChange: (text: string) => void;
+  onDelete: () => void;
   calculateWidth: (text: string) => number;
   sheetWidth: number;
 }
 
-const TextBoxInput = ({ box, onChange, calculateWidth, sheetWidth }: TextBoxInputProps) => {
+const TextBoxInput = ({ box, onChange, onDelete, calculateWidth, sheetWidth }: TextBoxInputProps) => {
   const [width, setWidth] = useState(box.width);
   const [isAtMaxWidth, setIsAtMaxWidth] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -122,21 +130,40 @@ const TextBoxInput = ({ box, onChange, calculateWidth, sheetWidth }: TextBoxInpu
   };
 
   return (
-    <input
-      ref={inputRef}
-      type="text"
-      value={box.text}
-      onChange={handleChange}
-      onKeyDown={handleKeyDown}
-      className="absolute border-b border-primary/20 bg-transparent text-foreground focus:outline-none focus:border-primary transition-colors px-1 overflow-hidden"
+    <div
+      className="absolute group"
       style={{
         left: `${box.x}px`,
         top: `${box.y}px`,
         width: `${width}px`,
-        fontSize: "16px",
-        fontFamily: "inherit",
       }}
-      placeholder="Type here..."
-    />
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      <input
+        ref={inputRef}
+        type="text"
+        value={box.text}
+        onChange={handleChange}
+        onKeyDown={handleKeyDown}
+        className="w-full border-b border-primary/20 bg-transparent text-foreground focus:outline-none focus:border-primary transition-colors px-1 overflow-hidden"
+        style={{
+          fontSize: "16px",
+          fontFamily: "inherit",
+        }}
+        placeholder="Type here..."
+      />
+      
+      {/* Delete button - shows on hover */}
+      {isHovered && (
+        <button
+          onClick={onDelete}
+          className="absolute -top-5 -right-5 w-5 h-5 rounded-full bg-destructive hover:bg-destructive/80 text-destructive-foreground flex items-center justify-center transition-all shadow-sm hover:shadow-md"
+          aria-label="Delete text box"
+        >
+          <X size={12} strokeWidth={3} />
+        </button>
+      )}
+    </div>
   );
 };
