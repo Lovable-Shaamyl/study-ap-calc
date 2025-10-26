@@ -44,47 +44,51 @@ export const LandingPage = ({ onEnterApp }: LandingPageProps) => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-          {benefits.map((benefit, index) => (
-            <Card 
-              key={index} 
-              className="hover-scale border-primary/20 hover:border-primary/40 transition-all duration-300 bg-card/80 backdrop-blur-sm"
-            >
-              <CardContent className="pt-6 space-y-3">
+        <div className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-6">
+              {benefits.map((benefit, index) => (
+                <Card 
+                  key={index} 
+                  className="hover-scale border-primary/20 hover:border-primary/40 transition-all duration-300 bg-card/80 backdrop-blur-sm"
+                >
+                  <CardContent className="pt-6 space-y-3">
+                    <div className="flex justify-center">
+                      <div className="p-3 rounded-full bg-primary/10 transition-all duration-300 group-hover:bg-primary/20">
+                        <benefit.icon className="w-6 h-6 text-primary transition-transform duration-300 hover:scale-110" />
+                      </div>
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground">
+                      {benefit.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      {benefit.description}
+                    </p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            <Card className="hover-scale border-accent/40 hover:border-accent transition-all duration-300 bg-gradient-to-br from-accent/10 to-primary/10 backdrop-blur-sm lg:row-span-1 flex items-center">
+              <CardContent className="pt-6 space-y-3 w-full">
                 <div className="flex justify-center">
-                  <div className="p-3 rounded-full bg-primary/10 transition-all duration-300 group-hover:bg-primary/20">
-                    <benefit.icon className="w-6 h-6 text-primary transition-transform duration-300 hover:scale-110" />
+                  <div className="p-3 rounded-full bg-accent/20 transition-all duration-300">
+                    <DollarSign className="w-6 h-6 text-accent transition-transform duration-300 hover:scale-110" />
                   </div>
                 </div>
                 <h3 className="text-lg font-semibold text-foreground">
-                  {benefit.title}
+                  Affordable Access
                 </h3>
+                <div className="flex items-baseline justify-center gap-1">
+                  <span className="text-3xl font-bold text-accent">$9.99</span>
+                  <span className="text-sm text-muted-foreground">/month</span>
+                </div>
                 <p className="text-sm text-muted-foreground">
-                  {benefit.description}
+                  Premium learning at an unbeatable price
                 </p>
               </CardContent>
             </Card>
-          ))}
-          
-          <Card className="hover-scale border-accent/40 hover:border-accent transition-all duration-300 bg-gradient-to-br from-accent/10 to-primary/10 backdrop-blur-sm md:col-span-2 lg:col-span-1">
-            <CardContent className="pt-6 space-y-3">
-              <div className="flex justify-center">
-                <div className="p-3 rounded-full bg-accent/20 transition-all duration-300">
-                  <DollarSign className="w-6 h-6 text-accent transition-transform duration-300 hover:scale-110" />
-                </div>
-              </div>
-              <h3 className="text-lg font-semibold text-foreground">
-                Affordable Access
-              </h3>
-              <div className="flex items-baseline justify-center gap-1">
-                <span className="text-3xl font-bold text-accent">$9.99</span>
-                <span className="text-sm text-muted-foreground">/month</span>
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Premium learning at an unbeatable price
-              </p>
-            </CardContent>
-          </Card>
+          </div>
         </div>
 
         <div className="animate-fade-in" style={{ animationDelay: "0.4s" }}>
