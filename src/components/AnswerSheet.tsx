@@ -149,12 +149,11 @@ const TextBoxInput = ({ box, onChange, onDelete, calculateWidth, sheetWidth }: T
         value={box.text}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        className="w-full border-b border-primary/20 bg-transparent text-foreground focus:outline-none focus:border-primary transition-colors px-1 overflow-hidden"
+        className="w-full bg-transparent text-foreground focus:outline-none transition-colors px-1 overflow-hidden"
         style={{
           fontSize: "16px",
           fontFamily: "inherit",
         }}
-        placeholder="Type here..."
       />
       
       {/* Delete button - shows on hover */}
