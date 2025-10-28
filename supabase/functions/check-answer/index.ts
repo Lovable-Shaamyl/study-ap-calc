@@ -43,26 +43,30 @@ serve(async (req) => {
   }
 
   try {
-    // Return generic error message - AI is disabled
-    return new Response(
-      JSON.stringify({ 
-        error: 'AI is disabled, please contact project owner' 
-      }), 
-      {
-        status: 503,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    );
+    // Return fallback response - AI is disabled
+    const fallbackResponse = {
+      correct: 'no',
+      correctPart: '',
+      incorrectPart: 'AI is currently disabled, please contact project owner',
+      correctApproach: 'AI is currently disabled',
+      suggestions: 'AI is currently disabled'
+    };
+    
+    return new Response(JSON.stringify(fallbackResponse), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   } catch (error) {
     console.error('Error in check-answer function:', error);
-    return new Response(
-      JSON.stringify({ 
-        error: 'AI is disabled, please contact project owner'
-      }), 
-      {
-        status: 503,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      }
-    );
+    const fallbackResponse = {
+      correct: 'no',
+      correctPart: '',
+      incorrectPart: 'AI is currently disabled, please contact project owner',
+      correctApproach: 'AI is currently disabled',
+      suggestions: 'AI is currently disabled'
+    };
+    
+    return new Response(JSON.stringify(fallbackResponse), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
 });
