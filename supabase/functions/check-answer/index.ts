@@ -43,101 +43,24 @@ serve(async (req) => {
   }
 
   try {
-    if (!openAIApiKey) {
-      throw new Error('OPENAI_API_KEY is not configured');
-    }
-
-    const { imageDataUrl, answerText } = await req.json();
-
-    if (!imageDataUrl) {
-      throw new Error('imageDataUrl is required');
-    }
-
-    // Build the prompt text
-    let promptText = "Please check this answer to the calculus problem. Provide detailed feedback on the mathematical work shown, including any errors, correct approaches, and suggestions for improvement." + PROMPT;
-    
-    // Add text content if provided
-    if (answerText && answerText.trim()) {
-      promptText += `\n\nStudent's answer in text: ${answerText.trim()}`;
-    }
-
-    console.log('Calling OpenAI API with model: gpt-5-2025-08-07');
-
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-5-2025-08-07',
-        messages: [
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'text',
-                text: promptText
-              },
-              {
-                type: 'image_url',
-                image_url: {
-                  url: imageDataUrl
-                }
-              }
-            ]
-          }
-        ]
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('OpenAI API error:', response.status, errorText);
-      throw new Error(`OpenAI API error: ${response.status} ${errorText}`);
-    }
-
-    const data = await response.json();
-    console.log('OpenAI response received, checking content...');
-    console.log('Response data:', JSON.stringify(data, null, 2));
-    
-    const responseContent = data.choices?.[0]?.message?.content;
-
-    if (!responseContent) {
-      console.error('No content in response. Full data:', JSON.stringify(data));
-      throw new Error('No response content received from OpenAI');
-    }
-
-    console.log('Successfully received AI response with content');
-
-    try {
-      // Parse the JSON response
-      const parsedFeedback = JSON.parse(responseContent);
-      return new Response(JSON.stringify(parsedFeedback), {
+    // Return generic error message - AI is disabled
+    return new Response(
+      JSON.stringify({ 
+        error: 'AI is disabled, please contact project owner' 
+      }), 
+      {
+        status: 503,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    } catch (parseError) {
-      console.error('Error parsing AI response as JSON:', parseError);
-      // Fallback to a structured error response
-      const fallbackResponse = {
-        correct: 'no',
-        correctPart: '',
-        incorrectPart: 'Unable to parse AI response',
-        correctApproach: 'Please try submitting again',
-        suggestions: 'There was an issue processing your answer. Please try again.'
-      };
-      return new Response(JSON.stringify(fallbackResponse), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
+      }
+    );
   } catch (error) {
     console.error('Error in check-answer function:', error);
     return new Response(
       JSON.stringify({ 
-        error: error instanceof Error ? error.message : 'Failed to get AI feedback. Please try again.' 
+        error: 'AI is disabled, please contact project owner'
       }), 
       {
-        status: 500,
+        status: 503,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     );
